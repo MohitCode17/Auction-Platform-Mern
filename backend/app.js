@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { config } from "./config/config.js";
+import { errorMiddleware } from "./middlewares/error.js";
 
 const app = express();
 
@@ -23,5 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/test", (req, res) => {
   res.send("Run Pass.");
 });
+
+// ERROR MIDDLEWARE
+app.use(errorMiddleware);
 
 export default app;
