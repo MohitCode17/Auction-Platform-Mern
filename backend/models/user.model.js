@@ -36,9 +36,10 @@ export const userSchema = new mongoose.Schema(
         bankAccountNumber: String,
         bankAccountName: String,
         bankName: String,
+        ifscCode: String,
       },
       paypal: {
-        type: String,
+        paypalId: String,
       },
       upiId: {
         type: String,
