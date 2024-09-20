@@ -1,5 +1,5 @@
 import express from "express";
-import { handleRegister } from "../controllers/user.controller";
+import { handleLogin, handleRegister } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/register", handleRegister);
 
 // LOGIN USER ROUTE
-
+router.post("/login", handleLogin);
 // LOGOUT USER ROUTE
 
 // GET MY PROFILE ROUTE

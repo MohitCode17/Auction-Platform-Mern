@@ -103,3 +103,26 @@ export const handleRegister = catchAsyncErrors(async (req, res, next) => {
 
   // 👉 TODO - GENERATE AUTH TOKEN AND SET TO COOKIE
 });
+
+// LOGIN USER CONTROLLER
+export const handleLogin = catchAsyncErrors(async (req, res, next) => {
+  // GETTING DATA
+  const { email, password } = req.body;
+
+  if (!email || !password)
+    return next(new ErrorHandler("Please provide all details.", 400));
+
+  // FIND USER
+  const user = await User.findOne({ email });
+
+  // THROW ERROR IF USER NOT REGISTER
+  if (!user) return next(new ErrorHandler("Invalid credentials.", 400));
+
+  // COMPARE PASSWORD
+  const isPasswordMatch = await user.comparePassword(password);
+
+  if (!isPasswordMatch)
+    return next(new ErrorHandler("Invalid credentials.", 400));
+
+  // 👉 TODO - GENERATE AUTH TOKEN AND SET TO COOKIE
+});
