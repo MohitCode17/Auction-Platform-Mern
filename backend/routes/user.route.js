@@ -1,9 +1,11 @@
 import express from "express";
 import {
+  handleGetProfile,
   handleLogin,
   handleLogout,
   handleRegister,
 } from "../controllers/user.controller.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 const router = express.Router();
 
@@ -17,6 +19,7 @@ router.post("/login", handleLogin);
 router.get("/logout", handleLogout);
 
 // GET MY PROFILE ROUTE
+router.get("/me", authenticate, handleGetProfile);
 
 // GET LEADERBOAD ROUTE
 
