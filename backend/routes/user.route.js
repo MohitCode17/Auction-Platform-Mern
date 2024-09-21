@@ -1,5 +1,9 @@
 import express from "express";
-import { handleLogin, handleRegister } from "../controllers/user.controller.js";
+import {
+  handleLogin,
+  handleLogout,
+  handleRegister,
+} from "../controllers/user.controller.js";
 
 const router = express.Router();
 
@@ -8,7 +12,9 @@ router.post("/register", handleRegister);
 
 // LOGIN USER ROUTE
 router.post("/login", handleLogin);
+
 // LOGOUT USER ROUTE
+router.get("/logout", handleLogout);
 
 // GET MY PROFILE ROUTE
 

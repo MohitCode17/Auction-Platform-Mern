@@ -129,3 +129,17 @@ export const handleLogin = catchAsyncErrors(async (req, res, next) => {
   // GENERATE AUTH TOKEN AND SET TO COOKIE
   generateToken(user, res, 200, "Login success.");
 });
+
+// LOGOUT CONTROLLER
+export const handleLogout = catchAsyncErrors(async (req, res, next) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: "Logout successfully.",
+    });
+});
