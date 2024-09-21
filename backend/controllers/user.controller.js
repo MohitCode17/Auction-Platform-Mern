@@ -144,6 +144,7 @@ export const handleLogout = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+// GET MY PROFILE CONTROLLER
 export const handleGetProfile = catchAsyncErrors(async (req, res, next) => {
   const user = req.user;
   res.status(200).json({
@@ -151,3 +152,15 @@ export const handleGetProfile = catchAsyncErrors(async (req, res, next) => {
     user,
   });
 });
+
+// GET LEADERBOARD CONTROLLER
+export const handleFetchLeaderboard = catchAsyncErrors(
+  async (req, res, next) => {
+    const users = await User.find({ moneySpent: { $gt: 0 } });
+    const leaderboard = users.sort((a, b) => b.moneySpent - a.moneySpent);
+    res.status(200).json({
+      success: true,
+      leaderboard,
+    });
+  }
+);

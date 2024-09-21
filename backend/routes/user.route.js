@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  handleFetchLeaderboard,
   handleGetProfile,
   handleLogin,
   handleLogout,
@@ -16,11 +17,12 @@ router.post("/register", handleRegister);
 router.post("/login", handleLogin);
 
 // LOGOUT USER ROUTE
-router.get("/logout", handleLogout);
+router.get("/logout", authenticate, handleLogout);
 
 // GET MY PROFILE ROUTE
 router.get("/me", authenticate, handleGetProfile);
 
 // GET LEADERBOAD ROUTE
+router.get("/leaderboard", handleFetchLeaderboard);
 
 export default router;
