@@ -13,6 +13,7 @@ export const authenticate = catchAsyncErrors(async (req, res, next) => {
 
   // VERIFY TOKEN
   const decoded = jwt.verify(token, config.JWT_SECRET_KEY);
-  req.user = await User.findById(decoded.userId);
+  console.log(decoded);
+  req.user = await User.findById(decoded.id);
   next();
 });

@@ -45,7 +45,7 @@ export const userSchema = new mongoose.Schema(
         paypalId: String,
       },
       upiId: {
-        type: String,
+        upiId: String,
       },
     },
     role: {
@@ -82,8 +82,8 @@ userSchema.methods.comparePassword = async function (userPassword) {
 };
 
 // GENERATE TOKEN
-userSchema.methods.generateJwtToken = async function () {
-  return jwt.sign({ userId: this._id }, config.JWT_SECRET_KEY, {
+userSchema.methods.generateJwtToken = function () {
+  return jwt.sign({ id: this._id }, config.JWT_SECRET_KEY, {
     expiresIn: config.TOKEN_EXPIRY,
   });
 };
