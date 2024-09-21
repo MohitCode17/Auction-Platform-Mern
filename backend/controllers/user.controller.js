@@ -2,6 +2,7 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary.js";
+import { generateToken } from "../utils/generateToken.js";
 
 // REGISTER USER ROUTE
 export const handleRegister = catchAsyncErrors(async (req, res, next) => {
@@ -101,7 +102,8 @@ export const handleRegister = catchAsyncErrors(async (req, res, next) => {
     },
   });
 
-  // 👉 TODO - GENERATE AUTH TOKEN AND SET TO COOKIE
+  // GENERATE AUTH TOKEN AND SET TO COOKIE
+  generateToken(user, res, 201, "Registration success.");
 });
 
 // LOGIN USER CONTROLLER
@@ -124,5 +126,6 @@ export const handleLogin = catchAsyncErrors(async (req, res, next) => {
   if (!isPasswordMatch)
     return next(new ErrorHandler("Invalid credentials.", 400));
 
-  // 👉 TODO - GENERATE AUTH TOKEN AND SET TO COOKIE
+  // GENERATE AUTH TOKEN AND SET TO COOKIE
+  generateToken(user, res, 200, "Login success.");
 });
