@@ -2,6 +2,7 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import Auction from "../models/auction.model.js";
 import cloudinary from "../config/cloudinary.js";
+import mongoose from "mongoose";
 
 // CREATE NEW AUCTION CONTROLLER
 export const handleAddNewAuction = catchAsyncErrors(async (req, res, next) => {
@@ -110,3 +111,27 @@ export const handlGetAuctions = catchAsyncErrors(async (req, res, next) => {
     auctions,
   });
 });
+
+// GET AUCTION DETAILS BY ID
+export const handleGetAuctionDetails = catchAsyncErrors(
+  async (req, res, next) => {
+    const { id } = req.params;
+
+    // VALIDATE THE ID
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return next(new ErrorHandler("Invalid id format.", 400));
+
+    // FIND THE AUCTION DETAILS
+    const auction = await Auction.findById(id);
+
+    if (!auction) return next(new ErrorHandler("Auction not found.", 404));
+
+    const bidders = auction.bids.sort((a, b) => b.amount - a.amount);
+
+    res.status(200).json({
+      success: true,
+      auction,
+      bidders,
+    });
+  }
+);

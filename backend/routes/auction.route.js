@@ -1,6 +1,7 @@
 import express from "express";
 import {
   handleAddNewAuction,
+  handleGetAuctionDetails,
   handlGetAuctions,
 } from "../controllers/auction.controller.js";
 import { authenticate, isAuthorized } from "../middlewares/authenticate.js";
@@ -17,5 +18,8 @@ router.post(
 
 // GET ALL AUCTIONS ROUTE
 router.get("/allAuctions", handlGetAuctions);
+
+// GET AUCTION DETAILS ROUTE
+router.get("/:id", authenticate, handleGetAuctionDetails);
 
 export default router;
