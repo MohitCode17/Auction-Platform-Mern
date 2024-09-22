@@ -135,3 +135,13 @@ export const handleGetAuctionDetails = catchAsyncErrors(
     });
   }
 );
+
+// GET MY AUCTIONS ROUTE
+export const handleGetMyAuctions = catchAsyncErrors(async (req, res, next) => {
+  const myAuctions = await Auction.find({ createdBy: req.user._id });
+
+  res.status(200).json({
+    success: true,
+    myAuctions,
+  });
+});
