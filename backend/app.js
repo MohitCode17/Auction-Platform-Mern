@@ -5,6 +5,7 @@ import { config } from "./config/config.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import fileUpload from "express-fileupload";
 import userRoutes from "./routes/user.route.js";
+import auctionRoutes from "./routes/auction.route.js";
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.get("/test", (req, res) => {
 
 // ROUTES
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/auction", auctionRoutes);
 
 // ERROR MIDDLEWARE
 app.use(errorMiddleware);

@@ -13,7 +13,21 @@ export const authenticate = catchAsyncErrors(async (req, res, next) => {
 
   // VERIFY TOKEN
   const decoded = jwt.verify(token, config.JWT_SECRET_KEY);
-  console.log(decoded);
   req.user = await User.findById(decoded.id);
   next();
 });
+
+// ROLE BASED AUTHORIZATION
+export const isAuthorized = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorHandler(
+          `${req.user.role} not allowed to access this resouce.`,
+          403
+        )
+      );
+    }
+    next();
+  };
+};

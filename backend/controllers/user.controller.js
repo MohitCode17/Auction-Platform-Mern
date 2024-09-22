@@ -41,13 +41,10 @@ export const handleRegister = catchAsyncErrors(async (req, res, next) => {
     if (!bankAccountName || !bankAccountNumber || !bankName || !ifscCode)
       return next(new ErrorHandler("Please provide your bank details.", 400));
 
-    if (!paypalId)
+    if (!paypalId && !upiId)
       return next(
-        new ErrorHandler("Please provide the your paypal account id.", 400)
+        new ErrorHandler("Please provide your paypal id or upi id.", 400)
       );
-
-    if (!upiId)
-      return next(new ErrorHandler("Please provide the your upi id.", 400));
   }
 
   // CHECK IF USER ALREADY REGISTER
