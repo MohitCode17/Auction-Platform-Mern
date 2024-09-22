@@ -3,6 +3,7 @@ import ErrorHandler from "../middlewares/error.js";
 import Auction from "../models/auction.model.js";
 import cloudinary from "../config/cloudinary.js";
 
+// CREATE NEW AUCTION CONTROLLER
 export const handleAddNewAuction = catchAsyncErrors(async (req, res, next) => {
   // THROW ERROR IF NO AUCTION IMAGE RECEIVED
   if (!req.files || Object.keys(req.files).length === 0)
@@ -98,5 +99,14 @@ export const handleAddNewAuction = catchAsyncErrors(async (req, res, next) => {
     success: true,
     message: `Auction created and will be listed on auction page at ${startTime}.`,
     auctionItem,
+  });
+});
+
+// GET ALL AUCTION CONTROLLER
+export const handlGetAuctions = catchAsyncErrors(async (req, res, next) => {
+  const auctions = await Auction.find();
+  res.status(200).json({
+    success: true,
+    auctions,
   });
 });
