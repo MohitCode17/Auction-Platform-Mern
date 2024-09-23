@@ -3,6 +3,7 @@ import {
   handleAddNewAuction,
   handleGetAuctionDetails,
   handleGetMyAuctions,
+  handleRemoveAuction,
   handlGetAuctions,
 } from "../controllers/auction.controller.js";
 import { authenticate, isAuthorized } from "../middlewares/authenticate.js";
@@ -29,6 +30,14 @@ router.get(
   authenticate,
   isAuthorized("Auctioneer"),
   handleGetMyAuctions
+);
+
+// DELETE AUCTION ROUTE
+router.delete(
+  "/delete/:id",
+  authenticate,
+  isAuthorized("Auctioneer"),
+  handleRemoveAuction
 );
 
 export default router;

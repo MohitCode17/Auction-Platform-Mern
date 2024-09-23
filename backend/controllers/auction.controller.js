@@ -136,12 +136,38 @@ export const handleGetAuctionDetails = catchAsyncErrors(
   }
 );
 
-// GET MY AUCTIONS ROUTE
+// GET MY AUCTIONS AUCTION
 export const handleGetMyAuctions = catchAsyncErrors(async (req, res, next) => {
   const myAuctions = await Auction.find({ createdBy: req.user._id });
 
   res.status(200).json({
     success: true,
     myAuctions,
+  });
+});
+
+// REMOVE AUCTION CONTROLLER
+export const handleRemoveAuction = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  // VALIDATE THE ID
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return next(new ErrorHandler("Invalid id format.", 400));
+
+  const auctionItem = await Auction.findById(id);
+
+  if (!auctionItem) return next(new ErrorHandler("Auction not found.", 404));
+
+  // DELETE AUCTION ITEM IMAGE
+  if (auctionItem) {
+    await cloudinary.uploader.destroy(auctionItem?.image?.public_id);
+  }
+
+  // DELETE AUCTION
+  await auctionItem.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Auction deleted successfully.",
   });
 });
