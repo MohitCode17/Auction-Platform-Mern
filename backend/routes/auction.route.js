@@ -4,9 +4,11 @@ import {
   handleGetAuctionDetails,
   handleGetMyAuctions,
   handleRemoveAuction,
+  handleRepublishAuction,
   handlGetAuctions,
 } from "../controllers/auction.controller.js";
 import { authenticate, isAuthorized } from "../middlewares/authenticate.js";
+import { trackCommissionStatus } from "../middlewares/trackCommissionStatus.js";
 
 const router = express.Router();
 
@@ -15,6 +17,7 @@ router.post(
   "/create",
   authenticate,
   isAuthorized("Auctioneer"),
+  trackCommissionStatus,
   handleAddNewAuction
 );
 
@@ -38,6 +41,14 @@ router.delete(
   authenticate,
   isAuthorized("Auctioneer"),
   handleRemoveAuction
+);
+
+// REPUBLISH AUCTION ROUTE
+router.put(
+  "/republish/:id",
+  authenticate,
+  isAuthorized("Auctioneer"),
+  handleRepublishAuction
 );
 
 export default router;

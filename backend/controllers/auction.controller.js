@@ -3,6 +3,7 @@ import ErrorHandler from "../middlewares/error.js";
 import Auction from "../models/auction.model.js";
 import cloudinary from "../config/cloudinary.js";
 import mongoose from "mongoose";
+import User from "../models/user.model.js";
 
 // CREATE NEW AUCTION CONTROLLER
 export const handleAddNewAuction = catchAsyncErrors(async (req, res, next) => {
@@ -171,3 +172,77 @@ export const handleRemoveAuction = catchAsyncErrors(async (req, res, next) => {
     message: "Auction deleted successfully.",
   });
 });
+
+// RE-PUBLISH AUCTION CONTROLLER
+export const handleRepublishAuction = catchAsyncErrors(
+  async (req, res, next) => {
+    const { id } = req.params;
+
+    // VALIDATE THE ID
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return next(new ErrorHandler("Invalid id format.", 400));
+
+    let auctionItem = await Auction.findById(id);
+
+    if (!auctionItem) return next(new ErrorHandler("Auction not found.", 404));
+
+    // GET STARTING TIME AND ENDING TIME OF AUCTION
+    if (!req.body.startTime || !req.body.endTime)
+      return next(
+        new ErrorHandler(
+          "Start and end time for republish auction is required.",
+          400
+        )
+      );
+
+    // VALIDATE DATE
+    if (new Date(auctionItem.endTime) > Date.now())
+      return next(
+        new ErrorHandler("Auction is already active, cannot republish.", 400)
+      );
+
+    // CREATE DATA OBJECT
+    let data = {
+      startTime: new Date(req.body.startTime),
+      endTime: new Date(req.body.endTime),
+    };
+
+    if (data.startTime < Date.now())
+      return next(
+        new ErrorHandler(
+          "Auction start time must be greater than present time."
+        )
+      );
+
+    if (data.startTime >= data.endTime)
+      return next(
+        new ErrorHandler("Auction starting time must be less than ending time.")
+      );
+
+    // BIDS WILL BE AT INITIAL STATE, WHEN REPUBLISH THE AUCTION
+    data.bids = [];
+
+    data.commissionCalculated = false;
+
+    auctionItem = await Auction.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    // UNPAID COMMISION SHOULD BE 0, WHEN REPUBLISH AUCTION
+    const createdBy = await User.findByIdAndUpdate(
+      req.user._id,
+      { unpaidCommision: 0 },
+      {
+        new: true,
+        runValidators: false,
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      auctionItem,
+      message: `Auction re-published and will be active on ${req.body.startTime}`,
+    });
+  }
+);
