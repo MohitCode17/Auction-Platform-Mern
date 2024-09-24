@@ -120,7 +120,7 @@ export const handleFetchAllUsers = catchAsyncErrors(async (req, res, next) => {
       $group: {
         _id: {
           month: { $month: "$createdAt" },
-          year: { $month: "$createdAt" },
+          year: { $year: "$createdAt" },
           role: "$role",
         },
         count: { $sum: 1 },
@@ -160,5 +160,40 @@ export const handleFetchAllUsers = catchAsyncErrors(async (req, res, next) => {
     success: true,
     biddersArray,
     auctioneersArray,
+  });
+});
+
+// FETCH MONTHLY INCOME
+export const handleMonthlyRevenue = catchAsyncErrors(async (req, res, next) => {
+  const payments = await Commission.aggregate([
+    {
+      $group: {
+        _id: {
+          month: { $month: "$createdAt" },
+          year: { $year: "$createdAt" },
+        },
+        totalAmount: { $sum: "$amount" },
+      },
+    },
+    {
+      $sort: { "_id.year": 1, "_id.month": 1 },
+    },
+  ]);
+
+  const transformDataToMonthlyArray = (payments, totalMonths = 12) => {
+    const result = Array(totalMonths).fill(0);
+
+    payments.forEach((payment) => {
+      result[payment._id.month - 1] = payment.totalAmount;
+    });
+
+    return result;
+  };
+
+  const totalMonthlyRevenue = transformDataToMonthlyArray(payments);
+
+  res.status(200).json({
+    success: true,
+    totalMonthlyRevenue,
   });
 });

@@ -6,6 +6,7 @@ import {
   handleFetchAllUsers,
   handleGetPaymentProof,
   handleGetPaymentProofDetail,
+  handleMonthlyRevenue,
   handleUpdatePaymentProof,
 } from "../controllers/superAdmin.controller.js";
 const router = express.Router();
@@ -56,6 +57,14 @@ router.get(
   authenticate,
   isAuthorized("Super Admin"),
   handleFetchAllUsers
+);
+
+// FETCH MONTHLY REVENUE (SUPER ADMIN ROUTE)
+router.get(
+  "/monthlyincome",
+  authenticate,
+  isAuthorized("Super Admin"),
+  handleMonthlyRevenue
 );
 
 export default router;
