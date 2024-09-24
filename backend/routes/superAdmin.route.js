@@ -3,6 +3,7 @@ import { authenticate, isAuthorized } from "../middlewares/authenticate.js";
 import {
   handleDeleteAuctionItem,
   handleDeletePaymentProof,
+  handleFetchAllUsers,
   handleGetPaymentProof,
   handleGetPaymentProofDetail,
   handleUpdatePaymentProof,
@@ -47,6 +48,14 @@ router.delete(
   authenticate,
   isAuthorized("Super Admin"),
   handleDeletePaymentProof
+);
+
+// FETCH ALL USERS (SUPER ADMIN ROUTE)
+router.get(
+  "/users/getall",
+  authenticate,
+  isAuthorized("Super Admin"),
+  handleFetchAllUsers
 );
 
 export default router;

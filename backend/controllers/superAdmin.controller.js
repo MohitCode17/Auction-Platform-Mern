@@ -112,3 +112,53 @@ export const handleDeletePaymentProof = catchAsyncErrors(
     });
   }
 );
+
+// FETCH USERS BY ROLE & WHEN THEY WERE CREATED
+export const handleFetchAllUsers = catchAsyncErrors(async (req, res, next) => {
+  const users = await User.aggregate([
+    {
+      $group: {
+        _id: {
+          month: { $month: "$createdAt" },
+          year: { $month: "$createdAt" },
+          role: "$role",
+        },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        month: "$_id.month",
+        year: "$_id.year",
+        role: "$_id.role",
+        count: 1,
+        _id: 0,
+      },
+    },
+    {
+      $sort: { year: 1, month: 1 },
+    },
+  ]);
+
+  const bidders = users.filter((user) => user.role === "Bidder");
+  const auctioneers = users.filter((user) => user.role === "Auctioneer");
+
+  const transformDataToMonthlyArray = (data, totalMonths = 12) => {
+    const result = Array(totalMonths).fill(0);
+
+    data.forEach((item) => {
+      result[item.month - 1] = item.count;
+    });
+
+    return result;
+  };
+
+  const biddersArray = transformDataToMonthlyArray(bidders);
+  const auctioneersArray = transformDataToMonthlyArray(auctioneers);
+
+  res.status(200).json({
+    success: true,
+    biddersArray,
+    auctioneersArray,
+  });
+});
