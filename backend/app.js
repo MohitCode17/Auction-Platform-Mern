@@ -8,6 +8,7 @@ import userRoutes from "./routes/user.route.js";
 import auctionRoutes from "./routes/auction.route.js";
 import bidRoutes from "./routes/bid.route.js";
 import commissionRoutes from "./routes/commission.route.js";
+import superAdminRoutes from "./routes/superAdmin.route.js";
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auction", auctionRoutes);
 app.use("/api/v1/bid", bidRoutes);
 app.use("/api/v1/commission", commissionRoutes);
+app.use("/api/v1/superadmin", superAdminRoutes);
 
 // ERROR MIDDLEWARE
 app.use(errorMiddleware);
