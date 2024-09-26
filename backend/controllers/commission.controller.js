@@ -3,6 +3,20 @@ import ErrorHandler from "../middlewares/error.js";
 import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary.js";
 import PaymentProof from "../models/commissionProof.model.js";
+import Auction from "../models/auction.model.js";
+import mongoose from "mongoose";
+
+// CALCULATE COMMISSION FUNCTION
+export const calculateCommission = async (auctionId) => {
+  if (!mongoose.Types.ObjectId.isValid(auctionId))
+    return next(new ErrorHandler("Invalid auction id.", 400));
+
+  const auction = await Auction.findById(auctionId);
+
+  const commissionRate = 0.01; // 1%
+  const commission = auction.currentBid * commissionRate; // Total commisssion
+  return commission;
+};
 
 export const handleCommissionProof = catchAsyncErrors(
   async (req, res, next) => {

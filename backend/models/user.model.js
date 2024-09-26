@@ -22,7 +22,6 @@ export const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       minLength: [10, "Phone number must be exactly 10 digits."],
-      maxLength: [10, "Phone number must be exactly 10 digits."],
     },
     profilePicture: {
       public_id: {

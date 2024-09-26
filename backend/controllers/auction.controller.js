@@ -4,6 +4,7 @@ import Auction from "../models/auction.model.js";
 import cloudinary from "../config/cloudinary.js";
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
+import Bid from "../models/bid.model.js";
 
 // CREATE NEW AUCTION CONTROLLER
 export const handleAddNewAuction = catchAsyncErrors(async (req, res, next) => {
@@ -219,15 +220,26 @@ export const handleRepublishAuction = catchAsyncErrors(
         new ErrorHandler("Auction starting time must be less than ending time.")
       );
 
+    if (auctionItem.highestBidder) {
+      const highestBidder = await User.findById(auctionItem.highestBidder);
+      highestBidder.moneySpent -= auctionItem.currentBid;
+      highestBidder.auctionsWon -= 1;
+      highestBidder.save();
+    }
+
     // BIDS WILL BE AT INITIAL STATE, WHEN REPUBLISH THE AUCTION
     data.bids = [];
 
     data.commissionCalculated = false;
+    data.currentBid = 0;
+    data.highestBidder = null;
 
     auctionItem = await Auction.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
     });
+
+    await Bid.deleteMany({ auctionItem: auctionItem._id });
 
     // UNPAID COMMISION SHOULD BE 0, WHEN REPUBLISH AUCTION
     const createdBy = await User.findByIdAndUpdate(
