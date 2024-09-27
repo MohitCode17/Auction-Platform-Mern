@@ -89,8 +89,8 @@ export const handleAddNewAuction = catchAsyncErrors(async (req, res, next) => {
     category,
     condition,
     startingBid,
-    startTime,
-    endTime,
+    startTime: new Date(startTime).toISOString(),
+    endTime: new Date(endTime).toISOString(),
     image: {
       public_id: cloudinaryResponse?.public_id,
       url: cloudinaryResponse?.secure_url,

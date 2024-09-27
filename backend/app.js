@@ -9,6 +9,8 @@ import auctionRoutes from "./routes/auction.route.js";
 import bidRoutes from "./routes/bid.route.js";
 import commissionRoutes from "./routes/commission.route.js";
 import superAdminRoutes from "./routes/superAdmin.route.js";
+import { verifyCommissionCron } from "./automation/verifyCommissionCron.js";
+import { endedAuctionCron } from "./automation/endAuctionCron.js";
 
 const app = express();
 
@@ -34,17 +36,16 @@ app.use(
   })
 );
 
-// TEST API
-app.get("/test", (req, res) => {
-  res.send("Run Pass.");
-});
-
 // ROUTES
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auction", auctionRoutes);
 app.use("/api/v1/bid", bidRoutes);
 app.use("/api/v1/commission", commissionRoutes);
 app.use("/api/v1/superadmin", superAdminRoutes);
+
+// RUNNING AUTOMATION
+endedAuctionCron();
+verifyCommissionCron();
 
 // ERROR MIDDLEWARE
 app.use(errorMiddleware);

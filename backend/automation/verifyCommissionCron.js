@@ -14,7 +14,7 @@ export const verifyCommissionCron = () => {
     for (let proof of approvedProofs) {
       try {
         // FIND THE USER ASSOCIATED WITH THE PAYMENT PROOF
-        const user = await User.findOne(proof.userId);
+        const user = await User.findById(proof.userId);
 
         let updatedUserData = {};
 
@@ -37,7 +37,7 @@ export const verifyCommissionCron = () => {
               status: "Settled",
             });
           } else {
-            // CASE WHETE PROOF AMOUNT EXCEEDS UNPAIND COMMISSION:
+            // CASE WHERE PROOF AMOUNT EXCEEDS UNPAIND COMMISSION:
             updatedUserData = await User.findByIdAndUpdate(
               user._id,
               {
@@ -45,6 +45,7 @@ export const verifyCommissionCron = () => {
               },
               { new: true }
             );
+            console.log(updatedUserData);
             await PaymentProof.findByIdAndUpdate(proof._id, {
               status: "Settled",
             });
@@ -62,12 +63,10 @@ export const verifyCommissionCron = () => {
 
           const subject = `Your Payment Has Been Successfully Verified And Settled`;
 
-          const message = `Dear ${user.username},\n\nWe are pleased to inform you that your recent payment has been successfully verified and settled. Thank you for promptly providing the necessary proof of payment. Your account has been updated, and you can now proceed with your activities on our platform without any restrictions.\n\nPayment Details:\nAmount Settled: ${proof.amount}\nUnpaid Amount: ${updatedUserData.unpaidCommission}\nDate of Settlement: ${settlementDate}\n\nBest regards,\nMG Auction & Team.`;
+          const message = `Dear ${user.username},\n\nWe are pleased to inform you that your recent payment has been successfully verified and settled. Thank you for promptly providing the necessary proof of payment. Your account has been updated, and you can now proceed with your activities on our platform without any restrictions.\n\nPayment Details:\nAmount Settled: ${proof.amount}\nUnpaid Amount: ${updatedUserData?.unpaidCommision}\nDate of Settlement: ${settlementDate}\n\nBest regards,\nMohit Gupta & Team.`;
 
           sendMail({ email: user.email, subject, message });
         }
-
-        console.log(`User ${proof.userId} paid commission of ${proof.amount}`);
       } catch (error) {
         console.error(
           `Error processing commission proof for user ${proof.userId}: ${error.message}`
