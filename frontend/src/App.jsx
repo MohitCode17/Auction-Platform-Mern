@@ -1,11 +1,21 @@
 import React from "react";
-import { Button } from "./components/ui/button";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import { ToastContainer } from "react-toastify";
+import SideDrawer from "./layout/SideDrawer";
 
 const App = () => {
   return (
-    <div>
-      <Button>Click Me</Button>
-    </div>
+    <Router>
+      {/* SIDEBAR */}
+      <SideDrawer />
+      {/* ROUTES */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+      {/* TOASTER */}
+      <ToastContainer position="bottom-right" />
+    </Router>
   );
 };
 

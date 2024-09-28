@@ -63,7 +63,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(86deg, rgba(246, 244, 240), #f6f4f0);
+    background: linear-gradient(86deg, rgb(245, 250, 255), rgb(250, 255, 255));
     overflow-x: hidden;
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
