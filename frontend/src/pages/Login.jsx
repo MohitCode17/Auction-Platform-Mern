@@ -1,17 +1,32 @@
-import React, { useState } from "react";
+import { login } from "@/store/slices/userSlice";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
 
   // REGISTER USER LOGIN
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Registered...");
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    dispatch(login(formData));
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [dispatch, isAuthenticated, loading]);
 
   return (
     <section className="bg-[#dbebf8] w-full h-fit min-h-screen lg:pl-[320px] flex flex-col justify-center items-center py-4 px-5">
@@ -46,7 +61,7 @@ const Login = () => {
             type="submit"
             disabled={loading}
           >
-            {loading && "Loading..."}
+            {loading && "Please wait..."}
             {!loading && "Login"}
           </button>
         </form>
