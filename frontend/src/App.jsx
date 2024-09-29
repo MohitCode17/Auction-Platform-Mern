@@ -6,6 +6,8 @@ import SideDrawer from "./layout/SideDrawer";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import SubmitCommission from "./pages/SubmitCommission";
+import HowItWork from "./pages/HowItWork";
+import About from "./pages/About";
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/submit-commission" element={<SubmitCommission />} />
+        <Route path="/how-it-works" element={<HowItWork />} />
+        <Route path="/about-us" element={<About />} />
       </Routes>
       {/* TOASTER */}
       <ToastContainer position="bottom-right" />
