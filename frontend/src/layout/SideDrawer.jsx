@@ -11,19 +11,17 @@ import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/store/slices/userSlice";
 
 const SideDrawer = () => {
   const [show, setShow] = useState(false);
-
-  // DEMO DATA - TO BE REMOVED WHEN WORK ON REDUX.
-  const isAuthenticated = false;
-  const user = {
-    role: "Auctioneer",
-  };
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.user);
 
   // LOGOUT FUNCTION
   const handleLogout = () => {
-    console.log("Logged out.");
+    dispatch(logout());
   };
 
   return (
