@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { register } from "@/store/slices/userSlice";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -17,8 +19,9 @@ const Register = () => {
   const [profilePicture, setProfilePicture] = useState("");
   const [profilePicturePreview, setProfilePicturePreview] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // IMAGE HANDLER
   const handleImage = (e) => {
@@ -35,8 +38,32 @@ const Register = () => {
   // REGISTER USER HANDLER
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log("Registered...");
+
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("phone", phone);
+    formData.append("address", address);
+    formData.append("role", role);
+    formData.append("profilePicture", profilePicture);
+    role === "Auctioneer" &&
+      (formData.append("bankAccountName", bankAccountName),
+      formData.append("bankName", bankName),
+      formData.append("bankAccountNumber", bankAccountNumber),
+      formData.append("ifscCode", ifscCode),
+      formData.append("paypalId", paypalId),
+      formData.append("upiId", upiId));
+
+    // DISPATCHING REGISTER HANDLER
+    dispatch(register(formData));
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [dispatch, loading, isAuthenticated]);
 
   return (
     <section className="bg-[#dbebf8] w-full h-fit min-h-screen lg:pl-[320px] flex flex-col justify-center py-4 px-5">
@@ -225,7 +252,7 @@ const Register = () => {
             type="submit"
             disabled={loading}
           >
-            {loading && "Registering..."}
+            {loading && "Please wait..."}
             {!loading && "Register"}
           </button>
         </form>

@@ -1,13 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import { ToastContainer } from "react-toastify";
 import SideDrawer from "./layout/SideDrawer";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import SubmitCommission from "./pages/SubmitCommission";
 import HowItWork from "./pages/HowItWork";
 import About from "./pages/About";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
@@ -24,7 +25,7 @@ const App = () => {
         <Route path="/about-us" element={<About />} />
       </Routes>
       {/* TOASTER */}
-      <ToastContainer position="bottom-right" />
+      <ToastContainer position="bottom-right" theme="colored" />
     </Router>
   );
 };

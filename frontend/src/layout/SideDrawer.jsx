@@ -16,7 +16,7 @@ const SideDrawer = () => {
   const [show, setShow] = useState(false);
 
   // DEMO DATA - TO BE REMOVED WHEN WORK ON REDUX.
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const user = {
     role: "Auctioneer",
   };
