@@ -144,7 +144,6 @@ export const handleLogout = catchAsyncErrors(async (req, res, next) => {
 // GET MY PROFILE CONTROLLER
 export const handleGetProfile = catchAsyncErrors(async (req, res, next) => {
   const user = req.user;
-  console.log(user);
   res.status(200).json({
     success: true,
     user,

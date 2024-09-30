@@ -46,10 +46,14 @@ export const handleCommissionProof = catchAsyncErrors(
         message: "You don't have any unpaid commission.",
       });
 
-    if (user.unpaidCommision < amount)
+    // CONVERT AMOUNT TO A NUMBER
+    const submittedAmount = parseInt(amount);
+
+    // CHECK IF THE SUBMITTED AMOUNT IS EXACTLY EQUAL TO THE UPAID COMMISSION
+    if (user.unpaidCommision !== submittedAmount)
       return next(
         new ErrorHandler(
-          `The amount exceeds your unpaid commission balance. Please enter an amount up to ${user.unpaidCommision}`,
+          `The amount you entered does not match the unpaid commission. You must pay exactly ${user.unpaidCommision}.`,
           403
         )
       );
@@ -77,7 +81,7 @@ export const handleCommissionProof = catchAsyncErrors(
         public_id: cloudinaryResponse?.public_id,
         url: cloudinaryResponse?.secure_url,
       },
-      amount,
+      amount: submittedAmount,
       comment,
     });
 

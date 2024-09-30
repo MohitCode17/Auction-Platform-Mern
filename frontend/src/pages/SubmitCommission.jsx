@@ -1,9 +1,13 @@
+import { postCommissionProof } from "@/store/slices/commissionSlice";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const SubmitCommission = () => {
   const [proof, setProof] = useState("");
   const [amount, setAmount] = useState("");
   const [comment, setComment] = useState("");
+  const { loading } = useSelector((state) => state.commission);
+  const dispatch = useDispatch();
 
   // HANDLE PROOF
   const handleProof = (e) => {
@@ -11,11 +15,17 @@ const SubmitCommission = () => {
     setProof(file);
   };
 
-  const [loading, setLoading] = useState(false);
-
+  // HANDLE PAYMENT PROOF
   const handlePaymentProof = (e) => {
     e.preventDefault();
-    console.log("Payment proof submitted.");
+
+    const formData = new FormData();
+    formData.append("proof", proof);
+    formData.append("amount", amount);
+    formData.append("comment", comment);
+
+    // DISPATCH REQUEST
+    dispatch(postCommissionProof(formData));
   };
 
   return (
@@ -64,7 +74,7 @@ const SubmitCommission = () => {
             type="submit"
             disabled={loading}
           >
-            {loading && "Loading..."}
+            {loading && "Please wait..."}
             {!loading && "Upload Payment Proof"}
           </button>
         </form>

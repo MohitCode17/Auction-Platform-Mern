@@ -6,7 +6,7 @@ import { sendMail } from "../utils/sendMail.js";
 
 export const verifyCommissionCron = () => {
   cron.schedule("*/1 * * * *", async () => {
-    console.log("Running verify commission cron...");
+    // console.log("Running verify commission cron...");
 
     // FIND APPROVED PAYMENT PROOFS
     const approvedProofs = await PaymentProof.find({ status: "Approved" });
@@ -19,25 +19,8 @@ export const verifyCommissionCron = () => {
         let updatedUserData = {};
 
         if (user) {
-          // IF USER'S UNPAIDCOMMISSION IS GREATER THAN OR EQUAL TO THE AMOUNT OF THE PROOF:
-          // REDUCED UNPAID COMMISSION BY THE PROOF AMOUNT
-          if (user.unpaidCommision >= proof.amount) {
-            updatedUserData = await User.findByIdAndUpdate(
-              user._id,
-              {
-                $inc: {
-                  unpaidCommision: -proof.amount,
-                },
-              },
-              { new: true }
-            );
-
-            // UPDATE THE STATUS OF PROOF TO SETTLED, MEANING THE PAYMENT HAS BEEN VERIFIED AND CLEARED.
-            await PaymentProof.findByIdAndUpdate(proof._id, {
-              status: "Settled",
-            });
-          } else {
-            // CASE WHERE PROOF AMOUNT EXCEEDS UNPAIND COMMISSION:
+          // CHECK IF THE SUBMITTED PROOF AMOUNT MATCHES THE USER'S UNPAID COMMISSION EXACTLY
+          if (user.unpaidCommision === proof.amount) {
             updatedUserData = await User.findByIdAndUpdate(
               user._id,
               {
@@ -45,27 +28,34 @@ export const verifyCommissionCron = () => {
               },
               { new: true }
             );
-            console.log(updatedUserData);
+
+            // UPDATE THE STATUS OF THE PAYMENT PROOF TO "SETTLED"
             await PaymentProof.findByIdAndUpdate(proof._id, {
               status: "Settled",
             });
+
+            // RECORD THE COMMISSION IN THE DB, ASSOCIATING THE AMOUNT PAID WITH THE USER
+            await Commission.create({
+              amount: proof.amount,
+              user: user._id,
+            });
+
+            // SETTLEMENT CONFIRMATION EMAIL
+            const settlementDate = new Date(Date.now())
+              .toString()
+              .substring(0, 15);
+
+            const subject = `Your Payment Has Been Successfully Verified And Settled`;
+
+            const message = `Dear ${user.username},\n\nWe are pleased to inform you that your recent payment has been successfully verified and settled. Thank you for promptly providing the necessary proof of payment. Your account has been updated, and you can now proceed with your activities on our platform without any restrictions.\n\nPayment Details:\nAmount Settled: ${proof.amount}\nUnpaid Amount: ${updatedUserData?.unpaidCommision}\nDate of Settlement: ${settlementDate}\n\nBest regards,\nMohit Gupta & Team.`;
+
+            sendMail({ email: user.email, subject, message });
+          } else {
+            // CASE WHERE PROOF AMOUNT DOES NOT MATCH THE UNPAID COMMISSION
+            console.log(
+              `Payment proof amount (${proof.amount}) does not match the user's unpaid commission (${user.unpaidCommision}). Skipping settlement for user ${user._id}.`
+            );
           }
-
-          // RECORD THE COMMISSION IN THE DB, ASSOCIATING THE AMOUNT PAID WITH THE USER
-          await Commission.create({
-            amount: proof.amount,
-            user: user._id,
-          });
-
-          const settlementDate = new Date(Date.now())
-            .toString()
-            .substring(0, 15);
-
-          const subject = `Your Payment Has Been Successfully Verified And Settled`;
-
-          const message = `Dear ${user.username},\n\nWe are pleased to inform you that your recent payment has been successfully verified and settled. Thank you for promptly providing the necessary proof of payment. Your account has been updated, and you can now proceed with your activities on our platform without any restrictions.\n\nPayment Details:\nAmount Settled: ${proof.amount}\nUnpaid Amount: ${updatedUserData?.unpaidCommision}\nDate of Settlement: ${settlementDate}\n\nBest regards,\nMohit Gupta & Team.`;
-
-          sendMail({ email: user.email, subject, message });
         }
       } catch (error) {
         console.error(
