@@ -68,7 +68,8 @@ const Card = ({ img, title, startingBid, startTime, endTime, id }) => {
         <h5 className="font-semibold text-lg text-blue-600 mb-2">{title}</h5>
         {startingBid && (
           <p className="text-gray-600 font-light mb-1">
-            Starting Bid: <span className="text-blue-500 font-bold">{startingBid}</span>
+            Starting Bid:{" "}
+            <span className="text-blue-500 font-bold">{startingBid}</span>
           </p>
         )}
         <p className="text-gray-600 font-light">
