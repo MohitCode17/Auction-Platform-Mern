@@ -4,6 +4,7 @@ import { BiDollarCircle } from "react-icons/bi";
 import { MdOutlineCelebration } from "react-icons/md";
 import { RiForbid2Line } from "react-icons/ri";
 import { RiAuctionLine } from "react-icons/ri";
+import FeaturedAuctions from "@/components/FeaturedAuctions";
 
 const Home = () => {
   const howItWorks = [
@@ -66,7 +67,7 @@ const Home = () => {
         </div>
 
         {/* How It Works Section */}
-        <div className="mt-16 max-w-5xl mx-auto">
+        <div className="mt-8 max-w-5xl mx-auto">
           <h3 className="text-[#4379F2] text-2xl font-bold mb-6 text-center">
             How It Works
           </h3>
@@ -86,6 +87,10 @@ const Home = () => {
               </div>
             ))}
           </div>
+        </div>
+        {/* FEATURED SECTION */}
+        <div className="mt-12">
+          <FeaturedAuctions />
         </div>
       </section>
     </>

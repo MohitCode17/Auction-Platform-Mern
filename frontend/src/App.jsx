@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "./store/slices/userSlice";
+import { getAllAuctions } from "./store/slices/auctionSlice";
 
 const App = () => {
   // FETCH USER PROFILE
@@ -18,6 +19,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchUser());
+    dispatch(getAllAuctions());
   }, []);
 
   return (
