@@ -5,6 +5,7 @@ import { MdOutlineCelebration } from "react-icons/md";
 import { RiForbid2Line } from "react-icons/ri";
 import { RiAuctionLine } from "react-icons/ri";
 import FeaturedAuctions from "@/components/FeaturedAuctions";
+import UpcomingAuctions from "@/components/UpcomingAuctions";
 
 const Home = () => {
   const howItWorks = [
@@ -88,9 +89,14 @@ const Home = () => {
             ))}
           </div>
         </div>
-        {/* FEATURED SECTION */}
+        {/* FEATURED AUCTION SECTION */}
         <div className="mt-12">
           <FeaturedAuctions />
+        </div>
+
+        {/* UPCOMING AUCTION SECTION */}
+        <div className="mt-12">
+          <UpcomingAuctions />
         </div>
       </section>
     </>
