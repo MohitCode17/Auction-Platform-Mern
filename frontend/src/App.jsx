@@ -10,7 +10,7 @@ import About from "./pages/About";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
-import { fetchUser } from "./store/slices/userSlice";
+import { fetchLeaderboard, fetchUser } from "./store/slices/userSlice";
 import { getAllAuctions } from "./store/slices/auctionSlice";
 
 const App = () => {
@@ -20,6 +20,7 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchUser());
     dispatch(getAllAuctions());
+    dispatch(fetchLeaderboard());
   }, []);
 
   return (

@@ -6,6 +6,7 @@ import { RiForbid2Line } from "react-icons/ri";
 import { RiAuctionLine } from "react-icons/ri";
 import FeaturedAuctions from "@/components/FeaturedAuctions";
 import UpcomingAuctions from "@/components/UpcomingAuctions";
+import LeaderBoard from "@/components/LeaderBoard";
 
 const Home = () => {
   const howItWorks = [
@@ -97,6 +98,9 @@ const Home = () => {
         {/* UPCOMING AUCTION SECTION */}
         <div className="mt-12">
           <UpcomingAuctions />
+        </div>
+        <div className="mt-12">
+          <LeaderBoard />
         </div>
       </section>
     </>
