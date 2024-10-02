@@ -60,7 +60,7 @@ const SideDrawer = () => {
 
             <li className="hover:bg-[#4379F2] hover:text-white p-1 rounded-sm transition-all duration-150">
               <Link
-                to={"/auctions"}
+                to={"/leaderboard"}
                 className="flex items-center gap-2 font-semibold text-lg"
               >
                 <MdLeaderboard /> Leaderboard

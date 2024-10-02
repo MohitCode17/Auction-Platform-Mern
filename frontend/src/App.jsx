@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { fetchLeaderboard, fetchUser } from "./store/slices/userSlice";
 import { getAllAuctions } from "./store/slices/auctionSlice";
+import LeaderboardPage from "./pages/LeaderboardPage";
 
 const App = () => {
   // FETCH USER PROFILE
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/submit-commission" element={<SubmitCommission />} />
         <Route path="/how-it-works" element={<HowItWork />} />
         <Route path="/about-us" element={<About />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
       </Routes>
       {/* TOASTER */}
       <ToastContainer position="bottom-right" theme="colored" />

@@ -59,7 +59,7 @@ const LeaderBoard = () => {
                       {element.username}
                     </td>
                     <td className="py-4 px-6 font-medium">
-                      ${element.moneySpent}
+                      ₹{element.moneySpent}
                     </td>
                     <td className="py-4 px-6 font-medium">
                       {element.auctionsWon}
