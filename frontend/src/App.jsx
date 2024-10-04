@@ -12,6 +12,7 @@ import { fetchLeaderboard, fetchUser } from "./store/slices/userSlice";
 import { getAllAuctions } from "./store/slices/auctionSlice";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import Auctions from "./pages/Auctions";
+import AuctionDetail from "./pages/AuctionDetail";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/about-us" element={<About />} />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/auctions" element={<Auctions />} />
+        <Route path="/auction/item/:id" element={<AuctionDetail />} />
       </Routes>
       {/* TOASTER */}
       <ToastContainer position="bottom-right" theme="colored" />

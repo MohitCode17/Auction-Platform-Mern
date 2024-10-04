@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const LeaderBoard = () => {
   const { leaderboard } = useSelector((state) => state.user);
-  console.log(leaderboard);
+
   return (
     <>
       <section className="my-8 lg:px-5">

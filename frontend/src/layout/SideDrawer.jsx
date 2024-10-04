@@ -38,7 +38,7 @@ const SideDrawer = () => {
       <div
         className={`w-[100%] sm:w-[300px] h-full bg-[#dbebf8] fixed top-0 ${
           show ? "left-[0]" : "left-[-100%]"
-        } transition-all duration-150 p-4 flex flex-col justify-between lg:left-0 border-r-[1px] border-r-gray-400`}
+        } transition-all duration-150 p-4 flex flex-col justify-between lg:left-0 border-r-[1px] border-r-gray-400 z-[999]`}
       >
         <div className="relative">
           {/* LOGO */}

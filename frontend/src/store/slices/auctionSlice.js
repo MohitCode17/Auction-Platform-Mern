@@ -24,6 +24,19 @@ const auctionSlice = createSlice({
     getAllAuctionItemFailed(state, action) {
       state.loading = false;
     },
+    getAllAuctionDetailRequest(state, action) {
+      state.loading = true;
+    },
+    getAllAuctionDetailSuccess(state, action) {
+      state.loading = false;
+      state.auctionDetail = action.payload.auction;
+      state.auctionBidders = action.payload.bidders;
+    },
+    getAllAuctionDetailFailed(state, action) {
+      state.loading = false;
+      state.auctionDetail = state.auctionDetail;
+      state.auctionBidders = state.auctionBidders;
+    },
     resetSlice(state, action) {
       state.loading = false;
       state.auctionDetail = state.auctionDetail;
@@ -50,6 +63,23 @@ export const getAllAuctions = () => async (dispatch) => {
     dispatch(auctionSlice.actions.resetSlice());
   } catch (error) {
     dispatch(auctionSlice.actions.getAllAuctionItemFailed());
+    dispatch(auctionSlice.actions.resetSlice());
+  }
+};
+
+// REQUEST TO GET AUCTION BY ID
+export const getAuctionDetail = (id) => async (dispatch) => {
+  dispatch(auctionSlice.actions.getAllAuctionDetailRequest());
+
+  try {
+    const res = await axios.get(`${BACKEND_URL}/detail/${id}`, {
+      withCredentials: true,
+    });
+
+    dispatch(auctionSlice.actions.getAllAuctionDetailSuccess(res.data));
+    dispatch(auctionSlice.actions.resetSlice());
+  } catch (error) {
+    dispatch(auctionSlice.actions.getAllAuctionDetailFailed());
     dispatch(auctionSlice.actions.resetSlice());
   }
 };
