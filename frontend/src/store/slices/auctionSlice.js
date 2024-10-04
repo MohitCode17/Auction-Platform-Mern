@@ -37,6 +37,15 @@ const auctionSlice = createSlice({
       state.auctionDetail = state.auctionDetail;
       state.auctionBidders = state.auctionBidders;
     },
+    createAuctionRequest(state, action) {
+      state.loading = true;
+    },
+    createAuctionSuccess(state, action) {
+      state.loading = false;
+    },
+    createAuctionFailed(state, action) {
+      state.loading = false;
+    },
     resetSlice(state, action) {
       state.loading = false;
       state.auctionDetail = state.auctionDetail;
@@ -80,6 +89,27 @@ export const getAuctionDetail = (id) => async (dispatch) => {
     dispatch(auctionSlice.actions.resetSlice());
   } catch (error) {
     dispatch(auctionSlice.actions.getAllAuctionDetailFailed());
+    dispatch(auctionSlice.actions.resetSlice());
+  }
+};
+
+// REQUEST TO CREATE AUCTION
+export const createAuction = (data) => async (dispatch) => {
+  dispatch(auctionSlice.actions.createAuctionRequest());
+
+  try {
+    const res = await axios.post(`${BACKEND_URL}/create`, data, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    dispatch(auctionSlice.actions.createAuctionSuccess());
+    toast.success(res.data.message);
+    dispatch(auctionSlice.actions.resetSlice());
+  } catch (error) {
+    dispatch(auctionSlice.actions.createAuctionFailed());
+    toast.success(error.response.data.message);
     dispatch(auctionSlice.actions.resetSlice());
   }
 };
