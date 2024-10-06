@@ -17,6 +17,8 @@ import AuctionDetail from "./pages/AuctionDetail";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateAuction from "./pages/CreateAuction";
+import ViewMyAuction from "./pages/ViewMyAuction";
+import ViewMyAuctionDetail from "./pages/ViewMyAuctionDetail";
 
 const App = () => {
   // FETCH USER PROFILE
@@ -43,6 +45,8 @@ const App = () => {
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/auctions" element={<Auctions />} />
         <Route path="/create-auction" element={<CreateAuction />} />
+        <Route path="/view-my-auctions" element={<ViewMyAuction />} />
+        <Route path="/auction/detail/:id" element={<ViewMyAuctionDetail />} />
         <Route path="/auction/item/:id" element={<AuctionDetail />} />
       </Routes>
       {/* TOASTER */}

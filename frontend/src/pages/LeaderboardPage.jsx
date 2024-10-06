@@ -6,7 +6,7 @@ const LeaderboardPage = () => {
 
   return (
     <>
-      <section className="w-full h-fit px-5 pt-20 lg:pl-[320px] flex flex-col min-h-screen bg-gradient-to-b from-[#dbebf8] to-[#b0d5ec]">
+      <section className="w-full h-fit px-5 pt-10 lg:pl-[320px] flex flex-col min-h-screen bg-gradient-to-b from-[#dbebf8] to-[#b0d5ec]">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <Spinner />

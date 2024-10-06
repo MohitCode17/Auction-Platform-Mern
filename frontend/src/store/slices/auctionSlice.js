@@ -37,8 +37,38 @@ const auctionSlice = createSlice({
       state.auctionDetail = state.auctionDetail;
       state.auctionBidders = state.auctionBidders;
     },
-    createAuctionRequest(state, action) {
+    getMyAuctionsRequest(state, action) {
       state.loading = true;
+      state.myAuctions = [];
+    },
+    getMyAuctionsSuccess(state, action) {
+      state.loading = false;
+      state.myAuctions = action.payload.myAuctions;
+    },
+    getMyAuctionsFailed(state, action) {
+      state.loading = false;
+      state.myAuctions = [];
+    },
+    deleteAuctionRequest(state, action) {
+      state.loading = true;
+    },
+    deleteAuctionSuccess(state, action) {
+      state.loading = false;
+    },
+    deleteAuctionFailed(state, action) {
+      state.loading = false;
+    },
+    republishAuctionRequest(state, action) {
+      state.loading = true;
+    },
+    republishAuctionSuccess(state, action) {
+      state.loading = false;
+    },
+    republicAuctionFailed(state, action) {
+      state.loading = false;
+    },
+    createAuctionRequest(state, action) {
+      state.loading = false;
     },
     createAuctionSuccess(state, action) {
       state.loading = false;
@@ -89,6 +119,65 @@ export const getAuctionDetail = (id) => async (dispatch) => {
     dispatch(auctionSlice.actions.resetSlice());
   } catch (error) {
     dispatch(auctionSlice.actions.getAllAuctionDetailFailed());
+    dispatch(auctionSlice.actions.resetSlice());
+  }
+};
+
+// REQUEST TO GET MY AUCTIONS
+export const getMyAuctions = () => async (dispatch) => {
+  dispatch(auctionSlice.actions.getMyAuctionsRequest());
+
+  try {
+    const res = await axios.get(`${BACKEND_URL}/myAuction`, {
+      withCredentials: true,
+    });
+    dispatch(auctionSlice.actions.getMyAuctionsSuccess(res.data));
+    dispatch(auctionSlice.actions.resetSlice());
+  } catch (error) {
+    dispatch(auctionSlice.actions.getMyAuctionsFailed());
+    dispatch(auctionSlice.actions.resetSlice());
+  }
+};
+
+// REQUEST TO DELETE MY AUCTION
+export const deleteAuction = (id) => async (dispatch) => {
+  dispatch(auctionSlice.actions.deleteAuctionRequest());
+
+  try {
+    const res = await axios.delete(`${BACKEND_URL}/delete/${id}`, {
+      withCredentials: true,
+    });
+    dispatch(auctionSlice.actions.deleteAuctionSuccess());
+    toast.success(res.data.message);
+    dispatch(getAllAuctions());
+    dispatch(getMyAuctions());
+    dispatch(auctionSlice.actions.resetSlice());
+  } catch (error) {
+    dispatch(auctionSlice.actions.deleteAuctionFailed());
+    toast.error(error.response.data.message);
+    dispatch(auctionSlice.actions.resetSlice());
+  }
+};
+
+// REQUEST TO GET MY AUCTIONS
+export const republishAuction = (id, data) => async (dispatch) => {
+  dispatch(auctionSlice.actions.republishAuctionRequest());
+
+  try {
+    const res = await axios.put(`${BACKEND_URL}/republish/${id}`, data, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    dispatch(auctionSlice.actions.republishAuctionSuccess());
+    toast.success(res.data.message);
+    dispatch(getAllAuctions());
+    dispatch(getMyAuctions());
+    dispatch(auctionSlice.actions.resetSlice());
+  } catch (error) {
+    dispatch(auctionSlice.actions.republicAuctionFailed());
+    toast.error(error.response.data.message);
     dispatch(auctionSlice.actions.resetSlice());
   }
 };

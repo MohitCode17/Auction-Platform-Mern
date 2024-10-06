@@ -187,14 +187,17 @@ export const handleRepublishAuction = catchAsyncErrors(
 
     if (!auctionItem) return next(new ErrorHandler("Auction not found.", 404));
 
-    // GET STARTING TIME AND ENDING TIME OF AUCTION
-    if (!req.body.startTime || !req.body.endTime)
+    // VALIDATE START AND END TIME
+    const { startTime, endTime } = req.body;
+
+    if (!startTime || !endTime) {
       return next(
         new ErrorHandler(
-          "Start and end time for republish auction is required.",
+          "Start and end time for republishing auction is required.",
           400
         )
       );
+    }
 
     // VALIDATE DATE
     if (new Date(auctionItem.endTime) > Date.now())
@@ -202,37 +205,39 @@ export const handleRepublishAuction = catchAsyncErrors(
         new ErrorHandler("Auction is already active, cannot republish.", 400)
       );
 
-    // CREATE DATA OBJECT
-    let data = {
-      startTime: new Date(req.body.startTime),
-      endTime: new Date(req.body.endTime),
-    };
+    // VALIDATING AUCTION TIME CONSTRAINTS
+    const newStartTime = new Date(startTime).toISOString();
+    const newEndTime = new Date(endTime).toISOString();
 
-    if (data.startTime < Date.now())
+    if (new Date(newStartTime) < Date.now())
       return next(
         new ErrorHandler(
           "Auction start time must be greater than present time."
         )
       );
 
-    if (data.startTime >= data.endTime)
+    if (new Date(newStartTime) >= new Date(newEndTime))
       return next(
-        new ErrorHandler("Auction starting time must be less than ending time.")
+        new ErrorHandler("Auction start time must be less than end time.", 400)
       );
 
+    // Handle existing highest bidder logic
     if (auctionItem.highestBidder) {
       const highestBidder = await User.findById(auctionItem.highestBidder);
       highestBidder.moneySpent -= auctionItem.currentBid;
       highestBidder.auctionsWon -= 1;
-      highestBidder.save();
+      await highestBidder.save();
     }
 
-    // BIDS WILL BE AT INITIAL STATE, WHEN REPUBLISH THE AUCTION
-    data.bids = [];
-
-    data.commissionCalculated = false;
-    data.currentBid = 0;
-    data.highestBidder = null;
+    // RESET BIDS AND UPDATE DATA
+    const data = {
+      startTime: newStartTime,
+      endTime: newEndTime,
+      bids: [], // Reset bids when republishing the auction
+      commissionCalculated: false,
+      currentBid: 0,
+      highestBidder: null,
+    };
 
     auctionItem = await Auction.findByIdAndUpdate(id, data, {
       new: true,
@@ -241,8 +246,8 @@ export const handleRepublishAuction = catchAsyncErrors(
 
     await Bid.deleteMany({ auctionItem: auctionItem._id });
 
-    // UNPAID COMMISION SHOULD BE 0, WHEN REPUBLISH AUCTION
-    const createdBy = await User.findByIdAndUpdate(
+    // RESET UNPAID COMMISSION FOR USER
+    await User.findByIdAndUpdate(
       req.user._id,
       { unpaidCommision: 0 },
       {
@@ -254,7 +259,7 @@ export const handleRepublishAuction = catchAsyncErrors(
     res.status(200).json({
       success: true,
       auctionItem,
-      message: `Auction re-published and will be active on ${req.body.startTime}`,
+      message: `Auction re-published and will be active on ${startTime}`,
     });
   }
 );
