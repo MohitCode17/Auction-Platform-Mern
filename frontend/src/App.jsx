@@ -20,6 +20,7 @@ import Dashboard from "./pages/Dashboard";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Contact from "./pages/Contact";
 
 const App = () => {
   // FETCH USER PROFILE
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/submit-commission" element={<SubmitCommission />} />
         <Route path="/how-it-works" element={<HowItWork />} />
         <Route path="/about-us" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/auctions" element={<Auctions />} />
         <Route path="/create-auction" element={<CreateAuction />} />
