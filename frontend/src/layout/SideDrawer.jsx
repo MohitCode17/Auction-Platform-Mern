@@ -101,7 +101,7 @@ const SideDrawer = () => {
 
             {/* USER SHOULD AUTHENTICATE & MENU FOR SUPER ADMIN */}
             {isAuthenticated && user && user.role === "Super Admin" && (
-              <li className="hover:bg-[#4379F2] hover:text-white p-0 rounded-sm transition-all duration-150">
+              <li className="hover:bg-[#4379F2] hover:text-white p-1 rounded-sm transition-all duration-150">
                 <Link
                   to={"/dashboard"}
                   className="flex items-center gap-2 font-semibold text-lg"

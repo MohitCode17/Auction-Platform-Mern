@@ -18,7 +18,7 @@ const ViewMyAuctionDetail = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isAuthenticated || user.role !== "Auctioneer") {
+    if (!isAuthenticated || user.role === "Bidder") {
       navigate("/");
     }
     if (id) {

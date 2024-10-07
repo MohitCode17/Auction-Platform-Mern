@@ -13,12 +13,13 @@ import { getAllAuctions } from "./store/slices/auctionSlice";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import Auctions from "./pages/Auctions";
 import AuctionDetail from "./pages/AuctionDetail";
-
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import CreateAuction from "./pages/CreateAuction";
 import ViewMyAuction from "./pages/ViewMyAuction";
 import ViewMyAuctionDetail from "./pages/ViewMyAuctionDetail";
+import Dashboard from "./pages/Dashboard";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   // FETCH USER PROFILE
@@ -48,6 +49,9 @@ const App = () => {
         <Route path="/view-my-auctions" element={<ViewMyAuction />} />
         <Route path="/auction/detail/:id" element={<ViewMyAuctionDetail />} />
         <Route path="/auction/item/:id" element={<AuctionDetail />} />
+
+        {/* DASHBOARD */}
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       {/* TOASTER */}
       <ToastContainer position="bottom-right" theme="colored" />
