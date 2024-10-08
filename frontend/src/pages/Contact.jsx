@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import emailjs from "@emailjs/browser";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -14,7 +15,33 @@ const Contact = () => {
 
   const handleContactForm = (e) => {
     e.preventDefault();
-    // Add form handling logic here
+
+    setLoading(true);
+
+    const templateParams = {
+      name,
+      email,
+      phone,
+      subject,
+      message,
+    };
+
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAIL_SERVICE,
+        "template_6o81f85",
+        templateParams,
+        import.meta.env.VITE_EMAIL_PUBLIC_ID
+      )
+      .then(() => {
+        toast.success("Thank You! Your message has been sent successfully.");
+        setLoading(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error("Failed to send message");
+        setLoading(false);
+      });
   };
 
   return (
@@ -59,7 +86,7 @@ const Contact = () => {
                 Your Phone
               </label>
               <input
-                type="tel"
+                type="number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4379F2] transition-all duration-200"
