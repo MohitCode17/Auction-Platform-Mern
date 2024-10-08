@@ -16,13 +16,13 @@ const ViewMyAuction = () => {
       navigate("/");
     }
     dispatch(getMyAuctions());
-  }, [isAuthenticated, dispatch]);
+  }, [isAuthenticated, dispatch]);  
 
   return (
     <>
       <div className="w-full h-fit px-5 py-10 lg:pl-[320px] flex flex-col">
         <h1
-          className={`text-[#4379F2] text-2xl font-bold mb-8 min-[480px]:text-4xl md:text-6xl xl:text-7xl 2xl:text-8xl`}
+          className={`text-[#4379F2] text-2xl font-bold mb-8 min-[480px]:text-4xl md:text-6xl xl:text-7xl`}
         >
           My Auctions
         </h1>

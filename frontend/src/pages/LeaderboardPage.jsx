@@ -14,7 +14,7 @@ const LeaderboardPage = () => {
         <>
           {/* Header Section */}
           <div className="text-center mb-8">
-            <h1 className="text-[#4379F2] text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-bold mb-4">
+            <h1 className="text-[#4379F2] text-4xl sm:text-5xl md:text-7xl font-bold mb-4">
               Bidders Leaderboard
             </h1>
             <p className="text-gray-600 text-sm sm:text-xl md:text-2xl">
