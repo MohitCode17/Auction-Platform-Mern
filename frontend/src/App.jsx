@@ -21,6 +21,7 @@ import Dashboard from "./pages/Dashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
 
 const App = () => {
   // FETCH USER PROFILE
@@ -45,6 +46,7 @@ const App = () => {
         <Route path="/how-it-works" element={<HowItWork />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/auctions" element={<Auctions />} />
         <Route path="/create-auction" element={<CreateAuction />} />
